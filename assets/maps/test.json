@@ -1,9 +1,20 @@
 { "height":8,
  "layers":[
         {
-         "data":[1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 2, 2, 2, 2, 1, 1, 2, 1, 2, 2, 1, 1, 1, 1, 2, 1, 1, 2, 2, 2, 1, 1, 2, 2, 2, 1, 1, 2, 1, 1, 2, 1, 2, 1, 2, 2, 1, 1, 2, 1, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+         "data":[3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 4, 4, 4, 4, 3, 3, 4, 3, 4, 4, 3, 3, 3, 3, 4, 3, 3, 4, 4, 4, 3, 3, 4, 4, 4, 3, 3, 4, 3, 3, 4, 3, 4, 3, 0, 4, 3, 3, 4, 3, 4, 4, 4, 4, 3, 3, 3, 3, 3, 3, 3, 3, 3],
          "height":8,
          "name":"Tile Layer 1",
+         "opacity":1,
+         "type":"tilelayer",
+         "visible":true,
+         "width":8,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "data":[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+         "height":8,
+         "name":"Object Layer 1",
          "opacity":1,
          "type":"tilelayer",
          "visible":true,
@@ -18,8 +29,21 @@
  "tileheight":1,
  "tilesets":[
         {
-         "columns":4,
+         "columns":2,
          "firstgid":1,
+         "image":"..\/sprites\/objectset.png",
+         "imageheight":1,
+         "imagewidth":2,
+         "margin":0,
+         "name":"objects",
+         "spacing":0,
+         "tilecount":2,
+         "tileheight":1,
+         "tilewidth":1
+        }, 
+        {
+         "columns":4,
+         "firstgid":3,
          "image":"..\/sprites\/testmapsprite.png",
          "imageheight":1,
          "imagewidth":4,
@@ -28,6 +52,20 @@
          "spacing":0,
          "tilecount":4,
          "tileheight":1,
+         "tileproperties":
+            {
+             "1":
+                {
+                 "isWalkable":true
+                }
+            },
+         "tilepropertytypes":
+            {
+             "1":
+                {
+                 "isWalkable":"bool"
+                }
+            },
          "tilewidth":1
         }],
  "tilewidth":1,

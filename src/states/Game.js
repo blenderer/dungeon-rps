@@ -5,9 +5,16 @@ import testMapJson from '../../assets/maps/test.json';
 // import mapSprite from '../../assets/sprites/testmapsprite.png';
 
 export default class extends Phaser.State {
-  init () {}
+  init () {
+    this.playerX = 30*5;
+    this.playerY = 30*5;
+
+    this.player;
+  }
   preload () {
     this.game.load.image('terrain', 'assets/sprites/testmapsprite.png');
+    this.game.load.image('objects', 'assets/sprites/objectset.png');
+    this.game.load.image('player', 'assets/sprites/Hero.png');
     this.game.load.tilemap('test', null, testMapJson, Phaser.Tilemap.TILED_JSON);
   }
 
@@ -23,18 +30,65 @@ export default class extends Phaser.State {
 
     let map = this.game.add.tilemap('test');
     map.addTilesetImage('terrain');
+    map.addTilesetImage('objects');
 
     let layer = map.createLayer('Tile Layer 1');
     layer.scale.set(30);
     layer.smoothed = false;
     layer.resizeWorld();
-    // const map = new Phaser.Tilemap(this.game);
-    // const mapLayer = map.create('test', 100, 100, 10, 10);
-    // const newTile = new Phaser.Tile(mapLayer, 0, 0, 0, 10, 10)
-    // map.putTile(newTile, 0, 0);
-    // console.log(map.getTile(0, 0));
 
-    // console.log(Phaser.Tilemap.create());
+    map.forEach((tile) => {
+      console.log(tile);
+    }, this, 0, 0, 18, 18);
+
+    let objectLayer = map.createLayer('Object Layer 1');
+    objectLayer.scale.set(30);
+    objectLayer.smoothed = false;
+    objectLayer.resizeWorld();
+
+    // const startTile = objectLayer.getTiles(0, 5, 1, 1);
+
+    this.player = game.add.sprite(this.playerX, this.playerY, 'player');
+
+    this.player.scale.set(30);
+
+    const inputs = [
+      {
+        key: Phaser.Keyboard.UP,
+        handler: () => {
+          this.playerY -= 30;
+        }
+      },
+      {
+        key: Phaser.Keyboard.DOWN,
+        handler: () => {
+          this.playerY += 30;
+        }
+      },
+      {
+        key: Phaser.Keyboard.LEFT,
+        handler: () => {
+          this.playerX -= 30;
+        }
+      },
+      {
+        key: Phaser.Keyboard.RIGHT,
+        handler: () => {
+          this.playerX += 30;
+        }
+      },
+
+    ];
+
+    inputs.forEach((input) => {
+      const key = game.input.keyboard.addKey(input.key);
+      key.onDown.add(input.handler, this);
+    });
+  }
+
+  update () {
+    this.player.x = this.playerX;
+    this.player.y = this.playerY;
   }
 
   render () {
