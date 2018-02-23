@@ -4,10 +4,12 @@ import Mushroom from '../sprites/Mushroom'
 import testMapJson from '../../assets/maps/test.json';
 // import mapSprite from '../../assets/sprites/testmapsprite.png';
 
+const SCALE = 30;
+
 export default class extends Phaser.State {
   init () {
-    this.playerX = 30*5;
-    this.playerY = 30*5;
+    this.playerX = 5;
+    this.playerY = 5;
 
     this.player;
   }
@@ -19,81 +21,78 @@ export default class extends Phaser.State {
   }
 
   create () {
-    const bannerText = 'Phaser + ES6 + Webpack'
-    let banner = this.add.text(this.world.centerX, this.game.height - 80, bannerText)
-    banner.font = 'Bangers'
-    banner.padding.set(10, 16)
-    banner.fontSize = 40
-    banner.fill = '#77BFA3'
-    banner.smoothed = false
-    banner.anchor.setTo(0.5)
+    this.map = this.game.add.tilemap('test');
+    this.map.addTilesetImage('terrain');
+    this.map.addTilesetImage('objects');
 
-    let map = this.game.add.tilemap('test');
-    map.addTilesetImage('terrain');
-    map.addTilesetImage('objects');
+    this.layer = this.map.createLayer('Tile Layer 1');
+    this.layer.scale.set(SCALE);
+    this.layer.smoothed = false;
+    this.layer.resizeWorld();
 
-    let layer = map.createLayer('Tile Layer 1');
-    layer.scale.set(30);
-    layer.smoothed = false;
-    layer.resizeWorld();
+    this.walls = this.map.createLayer('Walls');
+    this.walls.scale.set(SCALE);
+    this.walls.smoothed = false;
+    this.walls.resizeWorld();
 
-    map.forEach((tile) => {
-      console.log(tile);
-    }, this, 0, 0, 18, 18);
-
-    let objectLayer = map.createLayer('Object Layer 1');
-    objectLayer.scale.set(30);
-    objectLayer.smoothed = false;
-    objectLayer.resizeWorld();
-
-    // const startTile = objectLayer.getTiles(0, 5, 1, 1);
-
-    this.player = game.add.sprite(this.playerX, this.playerY, 'player');
-
-    this.player.scale.set(30);
+    this.player = game.add.sprite(this.playerX * SCALE, this.playerY * SCALE, 'player');
+    this.player.scale.set(SCALE);
 
     const inputs = [
       {
         key: Phaser.Keyboard.UP,
         handler: () => {
-          this.playerY -= 30;
+          const aboveTile = this.map.getTileAbove(this.walls.index, this.playerX, this.playerY);
+          if (aboveTile && aboveTile.properties.isWalkable) {
+            this.player.y = aboveTile.y * SCALE;
+            this.playerY = aboveTile.y;
+          }
         }
       },
       {
         key: Phaser.Keyboard.DOWN,
         handler: () => {
-          this.playerY += 30;
+          const belowTile = this.map.getTileBelow(this.walls.index, this.playerX, this.playerY);
+          if (belowTile && belowTile.properties.isWalkable) {
+            this.player.y = belowTile.y * SCALE;
+            this.playerY = belowTile.y;
+          }
         }
       },
       {
         key: Phaser.Keyboard.LEFT,
         handler: () => {
-          this.playerX -= 30;
+          const leftTile = this.map.getTileLeft(this.walls.index, this.playerX, this.playerY);
+          if (leftTile && leftTile.properties.isWalkable) {
+            this.player.x = leftTile.x * SCALE;
+            this.playerX = leftTile.x;
+          }
         }
       },
       {
         key: Phaser.Keyboard.RIGHT,
         handler: () => {
-          this.playerX += 30;
+          const rightTile = this.map.getTileRight(this.walls.index, this.playerX, this.playerY);
+          if (rightTile && rightTile.properties.isWalkable) {
+            this.player.x = rightTile.x * 30;
+            this.playerX = rightTile.x;
+          }
         }
       },
 
     ];
 
     inputs.forEach((input) => {
-      const key = game.input.keyboard.addKey(input.key);
+      const key = this.game.input.keyboard.addKey(input.key);
       key.onDown.add(input.handler, this);
     });
   }
 
   update () {
-    this.player.x = this.playerX;
-    this.player.y = this.playerY;
+
   }
 
   render () {
-    if (__DEV__) {
-
-    }
+    this.game.debug.bodyInfo(this.player, 32, 280);
   }
 }
